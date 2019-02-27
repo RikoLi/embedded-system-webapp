@@ -1,6 +1,17 @@
 # embedded-system-webapp
 Embedded system assignment 3.
 
-## 目标
-* 主体HTML5+js+css
-* 兼容Android & iOS的hybrid app（后期打包）
+## 实现
+* HTML5+js+css
+* apk & ipa打包
+* 高德地图API
+
+## 内容
+* 现实交互型小游戏
+* 物品收集类RPG
+* 简单的用户系统
+    * 等级
+    * 生命
+    * 角色属性值
+* 简单的战斗系统
+* 简单的道具系统
