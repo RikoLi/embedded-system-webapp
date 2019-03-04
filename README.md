@@ -1,13 +1,14 @@
 # embedded-system-webapp
 Embedded system assignment 3.
 
-## 实现
+## 实现工具
 * HTML5+js+css
     * jQuery（若移动端支持）
 * apk & ipa打包
 * 高德地图API
 
 ## 内容
+* GPS定位
 * 现实交互型小游戏
 * 物品收集类RPG
 * 简单的用户系统
