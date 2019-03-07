@@ -1,6 +1,3 @@
-// Set map container size
-// document.getElementById('container').style.width = window.innerWidth+'px';
-
 // Initialize Amap
 let map = new AMap.Map('container', {
     resizeEnable: true,
