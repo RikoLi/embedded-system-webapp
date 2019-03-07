@@ -5,7 +5,8 @@
     <!-- For mobile devices, use this meta -->
     <meta name="viewport" content="width=device-width, maximum-scale=1.0, initial-scale=1.0, user-scalable=no">
     <title>Embedded-System-Project</title>
-    <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.13&key=2a3171708b419e8a51550185da60f357"></script>
+    <script src="https://webapi.amap.com/maps?v=1.4.13&key=2a3171708b419e8a51550185da60f357"></script>
+    <script src="https://webapi.amap.com/ui/1.0/main.js"></script>
     <link rel="stylesheet" type="text/css" media="screen" href="css/style.css" />
 </head>
 <body>
@@ -36,19 +37,23 @@
                 <p id="hp-p" class="text-p">hp</p>
             </div>
         </div>
+        <!-- Map detail info -->
+        <div id="info-div">
+            <p class="info-p">information</p>
+        </div>
         <!-- Menu -->
         <div id="menu-div">
-            <div class="menu-button-div" id="status-button">
-                <button>status</button>
+            <div class="menu-button-div">
+                <button id="status-button" onclick="openStatus()">status</button>
             </div>
-            <div class="menu-button-div" id="item-button">
-                <button>item</button>
+            <div class="menu-button-div">
+                <button id="item-button" onclick="openItem()">item</button>
             </div>
-            <div class="menu-button-div" id="torch-button">
-                <button>torch</button>
+            <div class="menu-button-div">
+                <button id="torch-button" onclick="">torch</button>
             </div>
-            <div class="menu-button-div" id="camera-button">
-                <button>camera</button>
+            <div class="menu-button-div">
+                <button id="camera-button" onclick="openCam()">camera</button>
             </div>
         </div>
     </div>
