@@ -10,11 +10,32 @@
 </head>
 <body>
     <div id="body-div">
-        <header>Game name</header>
-        <!-- Map container -->
-        <div id="container"></div>
+        <div id="head"><img src="img/header.png" alt="header_img" width="350"></div>
+        <div id="map-div">
+            <!-- Map container -->
+            <div id="container"></div>
+        </div>
         <!-- Easy status display -->
-        <div id="status-div">status-div</div>
+        <div id="status-label-div">
+            <p class="label-p">TIME</p>
+            <p class="label-p">DISTANCE</p>
+            <p class="label-p">LEVEL</p>
+            <p class="label-p">HP</p>
+        </div>
+        <div id="status-div">
+            <div class="status-disp" id="time-disp">
+                <p id="time-p" class="text-p"></p>
+            </div>
+            <div class="status-disp" id="dist-disp">
+                <p id="dist-p" class="text-p">dist</p>
+            </div>
+            <div class="status-disp" id="level-disp">
+                <p id="level-p" class="text-p">level</p>
+            </div>
+            <div class="status-disp" id="hp-disp">
+                <p id="hp-p" class="text-p">hp</p>
+            </div>
+        </div>
         <!-- Menu -->
         <div id="menu-div">
             <div class="menu-button-div" id="status-button">
@@ -22,6 +43,12 @@
             </div>
             <div class="menu-button-div" id="item-button">
                 <button>item</button>
+            </div>
+            <div class="menu-button-div" id="torch-button">
+                <button>torch</button>
+            </div>
+            <div class="menu-button-div" id="camera-button">
+                <button>camera</button>
             </div>
         </div>
     </div>

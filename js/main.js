@@ -1,10 +1,12 @@
 // Initialize Amap
 let map = new AMap.Map('container', {
     resizeEnable: true,
-    mapStyle: 'amap://styles/fresh',
-    zoom: 17,
+    mapStyle: 'amap://styles/macaron',
+    zoom: 18,
     viewMode: '3D'
 });
+// Set map display features
+map.setFeatures(['road','point', 'bg']);
 
 // Apply geolocation via browser
 map.plugin('AMap.Geolocation', () => {
@@ -23,3 +25,12 @@ map.plugin('AMap.Geolocation', () => {
     map.addControl(geolocation);
     geolocation.getCurrentPosition();
 });
+
+// time test
+setInterval(() => {
+    let date = new Date();
+    sec = date.getSeconds().toString();
+    min = date.getMinutes().toString();
+    hour = date.getHours().toString();
+    document.getElementById('time-p').innerHTML = hour + ':' + min + ':' + sec;
+}, 1000);
