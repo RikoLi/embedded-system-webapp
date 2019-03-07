@@ -1,3 +1,6 @@
+// Set map container size
+// document.getElementById('container').style.width = window.innerWidth+'px';
+
 // Initialize Amap
 let map = new AMap.Map('container', {
     resizeEnable: true,
@@ -6,7 +9,7 @@ let map = new AMap.Map('container', {
     viewMode: '3D'
 });
 
-// Apply geolocation via explorer
+// Apply geolocation via browser
 map.plugin('AMap.Geolocation', () => {
     let geolocation = new AMap.Geolocation({
         // 是否使用高精度定位，默认：true

@@ -1,10 +1,23 @@
 body {
     text-align: center;
 }
+header {
+    height: 50px;
+}
 #container {
-    width: 400px;
+    width: 350px;
     height: 300px;
+    margin: 10px auto;
 }
 #body-div {
     margin: 0 auto;
+}
+#status-div {
+    height: 100px;
+}
+#menu-div {
+    height: 100px;
+}
+.menu-button-div {
+    display: inline-block;
 }
