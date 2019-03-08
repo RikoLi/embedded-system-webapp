@@ -89,7 +89,7 @@ AMapUI.loadUI(['misc/PositionPicker'], (PositionPicker) => {
         }
         // POI touching listening
         for (let i = 0; i < 5; i++) {
-            oldMarkerArray[i].on('click', (marker) => {
+            oldMarkerArray[i].on('touchend', (marker) => {
                 // Calculate distance
                 let targetPos = [marker.lnglat.lng, marker.lnglat.lat];
                 let selfPos = document.getElementById('current-pos').innerHTML;
