@@ -109,11 +109,25 @@ AMapUI.loadUI(['misc/PositionPicker'], (PositionPicker) => {
 
 
 /**
-* 本地数据存储
+* 数据存储（使用cookie）
 */
-
-
-
+// Set cookie
+let setCookie = (name, value, exdays) => {
+    let d = new Date();
+    d.setTime(d.getTime()+(exdays*24*60*60*1000));
+    let expires = 'expires='+d.toGMTString();
+    document.cookie = name + '=' + value + '; ' + expires;
+}
+// Get cookie
+let getCookie = (cname) => {
+    let name = cname + '=';
+    let ca = document.cookie.split(';');
+    for (let i = 0; i < ca.length; i++) {
+        let c = ca[i].trim();
+        if (c.indexOf(name) === 0) return c.substring(name.length, c.length);
+    }
+    return '';
+}
 
 /**
 * 相机+方向传感器定位AR显示
