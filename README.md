@@ -7,7 +7,6 @@ Embedded system assignment 3.
 * apk & ipa打包
 * 多种API
     * 高德地图API
-    * FileSaver.js
     * AR.js?
 * 移动设备可访问硬件
     * GPS
