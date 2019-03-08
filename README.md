@@ -5,7 +5,10 @@ Embedded system assignment 3.
 * HTML5+js+css
     * <del>jQuery（若移动端支持），废案</del>
 * apk & ipa打包
-* 高德地图API
+* 多种API
+    * 高德地图API
+    * FileSaver.js
+    * AR.js?
 * 移动设备可访问硬件
     * GPS
     * 蓝牙
@@ -15,7 +18,7 @@ Embedded system assignment 3.
 * 简单的HTML布局 done
 * GPS定位 done
 * 现实交互型小游戏
-    * 地图交互（事件触发）
+    * 地图交互（事件触发） done
     * 物品收集类RPG
     * 等级
     * 生命
