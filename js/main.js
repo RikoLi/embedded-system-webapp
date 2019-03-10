@@ -20,7 +20,7 @@ map.plugin('AMap.Geolocation', () => {
         zoomToAccuracy: false,     
         // 不显示定位按钮
         showButton: false,
-        maximumAge: 10
+        maximumAge: 0
     });
     let position = [];
     map.addControl(geolocation);
@@ -29,6 +29,12 @@ map.plugin('AMap.Geolocation', () => {
     else geolocation.watchPosition();    //For mobile users
     AMap.event.addListener(geolocation, 'complete', (data) => {
         document.getElementById('current-pos').innerHTML = '当前位置：'+'['+data.position.lng+', '+data.position.lat+']';
+        let currentPositionJSON = JSON.stringify({
+            lng: data.position.lng,
+            lat: data.position.lat
+        });
+        // Save position
+        localStorage.setItem('currentPositionJSON', currentPositionJSON);
     });
 });
 
@@ -43,17 +49,15 @@ setInterval(() => {
 
 // Button click events
 let openStatus = () => {
-    button = document.getElementById('status-button');
-    open('status.html', '_self');
+    // 
 }
 let openItem = () => {
     button = document.getElementById('item-button');
-    open('item.html', '_self');
 }
 let openCam = () => {
     button = document.getElementById('camera-button');
-    open('camera.html', '_self');
 }
+
 
 /**
 * 地图交互
@@ -81,28 +85,43 @@ AMapUI.loadUI(['misc/PositionPicker'], (PositionPicker) => {
         map.remove(oldMarkerArray);
         oldMarkerArray = [];
         for (let i = 0; i < 5; i++) {
+            // Create a marker
             let marker = new AMap.Marker({
                 position: locationArray[i],
-                title: poiArray[i].name
+                title: poiArray[i].name,
             });
             map.add(marker);
             oldMarkerArray.push(marker);
-            // POI touching listening
+            // POI touch events
             oldMarkerArray[i].on('touchstart', (marker) => {
+                // Timer reset
+                if (localStorage.getItem('distTimerId')) {
+                    let id = Number(localStorage.getItem('distTimerId'));
+                    clearInterval(id);
+                }
                 // Calculate distance
-                let targetPos = [marker.lnglat.lng, marker.lnglat.lat];
-                let selfPos = document.getElementById('current-pos').innerHTML;
-                selfPos = selfPos.split('：');
-                selfPos = selfPos[1].replace('[', '');
-                selfPos = selfPos.replace(']', '');
-                selfPos = selfPos.split(', ');
-                selfPos = [Number(selfPos[0]), Number(selfPos[1])];
-                document.getElementById('dist-p').innerHTML = AMap.GeometryUtil.distance(targetPos, selfPos).toFixed(2) + 'm';
-                // Print POI name
-                document.getElementById('target-name').innerHTML = marker.target.D.title;
+                let targetPos = locationArray[i];
+                let selfPos = JSON.parse(localStorage.getItem('currentPositionJSON'));
+                // Refresh distance
+                let distTimerId = setInterval(() => {
+                    let dist = AMap.GeometryUtil.distance(targetPos, [selfPos.lng, selfPos.lat]).toFixed(2);
+                    document.getElementById('dist-p').innerHTML = dist + 'm';
+                }, 100);
+                localStorage.setItem('distTimerId', distTimerId.toString());
+                // Print POI info
+                document.getElementById('target-name').innerHTML = '已选择位置：' + marker.target.D.title;
+                document.getElementById('visit-status').innerHTML = '上次访问：' + '上次访问时间';
+                // Print accessability
+                let dist = AMap.GeometryUtil.distance(targetPos, [selfPos.lng, selfPos.lat]).toFixed(2);
+                dist < 50 ? document.getElementById('access-p').innerHTML = '可访问' : document.getElementById('access-p').innerHTML = '太远啦';
+
+
+                // Visit interaction 访问地点逻辑
+
+
+
+
             });
-        }
-        for (let i = 0; i < 5; i++) {
         }
     });
     positionPicker.start();
@@ -110,28 +129,14 @@ AMapUI.loadUI(['misc/PositionPicker'], (PositionPicker) => {
 
 
 /**
-* 数据存储（使用cookie）
+* 数据存储（使用新API localStorage）
 */
-// Set cookie
-let setCookie = (name, value, exdays) => {
-    let d = new Date();
-    d.setTime(d.getTime()+(exdays*24*60*60*1000));
-    let expires = 'expires='+d.toGMTString();
-    document.cookie = name + '=' + value + '; ' + expires;
-}
-// Get cookie
-let getCookie = (cname) => {
-    let name = cname + '=';
-    let ca = document.cookie.split(';');
-    for (let i = 0; i < ca.length; i++) {
-        let c = ca[i].trim();
-        if (c.indexOf(name) === 0) return c.substring(name.length, c.length);
-    }
-    return '';
-}
+
+
+
+
 
 /**
 * 相机+方向传感器定位AR显示
 */
-
 

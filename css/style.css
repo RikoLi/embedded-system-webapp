@@ -99,6 +99,12 @@ button {
     height: 100px;
     background: radial-gradient(rgba(116, 139, 201, 0.5), rgba(58, 57, 57, 0.7));
 }
+#visit-button {
+    width: 45px;
+    height: 20px;
+}
+
+
 .menu-button-div {
     display: flex;
     flex-direction: column;
@@ -145,7 +151,7 @@ button {
     display: flex;
 
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 17px;
+    font-size: 10px;
     color: rgba(8, 235, 0, 0.8);
     margin: 0 auto;
 

@@ -25,6 +25,8 @@ Embedded system assignment 3.
 * 简单的互动系统
     * <del>访问蓝牙，多用户交互</del>不支持，废案
 * 简单的道具系统
+* 数据本地保存
+    * localStorage+json
 * AR要素？
 
 ## 测试
