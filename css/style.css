@@ -3,13 +3,6 @@ body {
     text-align: center;
     background-color:lightgray;
 }
-button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    width: 60px;
-    height: 60px;
 }
 
 #head {
@@ -26,21 +19,21 @@ button {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-
+    
     width: 320px;
     height: 250px;
     margin: 5px auto;
-
+    
     border-style: solid;
     border-color: black;
     border-width: 5px;
     border-radius: 10px;
-
+    
     background: radial-gradient(darkgray, rgba(0, 0, 0, 0.7), darkgray);
 }
 #container {
     display: flex;
-
+    
     width: 300px;
     height: 230px;
     margin: 10px auto;
@@ -59,13 +52,13 @@ button {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-
+    
     border-radius: 5px;
-
+    
     width: 300px;
     height: 50px;
     margin: 5px auto;
-
+    
     background-color: lightslategray;
 }
 #menu-div {
@@ -99,10 +92,6 @@ button {
     height: 100px;
     background: radial-gradient(rgba(116, 139, 201, 0.5), rgba(58, 57, 57, 0.7));
 }
-#visit-button {
-    width: 45px;
-    height: 20px;
-}
 
 
 .menu-button-div {
@@ -111,7 +100,7 @@ button {
     align-items: center;
     justify-content: center;
     flex-basis: 25%;
-
+    
     height: 60px;
 }
 .status-disp {
@@ -121,19 +110,19 @@ button {
     flex-direction: row;
     align-items: center;
     justify-content: center;
-
+    
     border-radius: 5px;
-
+    
     background: radial-gradient(rgba(116, 139, 201, 0.5), rgba(58, 57, 57, 0.7));
 }
 .text-p {
     display: flex;
-
+    
     align-content: center;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 15px;
     color: rgba(8, 235, 0, 0.8);
-
+    
     margin: 0 auto;
     width: inherit;
 }
@@ -142,19 +131,26 @@ button {
     flex-basis: 25%;
     justify-content: center;
     align-items: center;
-
+    
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-size: 3px;
     color: black;
 }
+.menu-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 60px;
+    height: 60px;
+}
 .info-p {
     display: flex;
-
+    
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-size: 10px;
     color: rgba(8, 235, 0, 0.8);
     margin: 0 auto;
-
+    
     word-wrap: break-word;
 	word-break: break-all;
-}

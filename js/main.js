@@ -33,8 +33,8 @@ map.plugin('AMap.Geolocation', () => {
             lng: data.position.lng,
             lat: data.position.lat
         });
-        // Save position
-        localStorage.setItem('currentPositionJSON', currentPositionJSON);
+        // Save position, session
+        sessionStorage.setItem('currentPositionJSON', currentPositionJSON);
     });
 });
 
@@ -57,7 +57,6 @@ let openItem = () => {
 let openCam = () => {
     button = document.getElementById('camera-button');
 }
-
 
 /**
 * 地图交互
@@ -95,32 +94,67 @@ AMapUI.loadUI(['misc/PositionPicker'], (PositionPicker) => {
             // POI touch events
             oldMarkerArray[i].on('touchstart', (marker) => {
                 // Timer reset
-                if (localStorage.getItem('distTimerId')) {
-                    let id = Number(localStorage.getItem('distTimerId'));
+                if (sessionStorage.getItem('distTimerId')) {
+                    let id = Number(sessionStorage.getItem('distTimerId'));
                     clearInterval(id);
                 }
                 // Calculate distance
                 let targetPos = locationArray[i];
-                let selfPos = JSON.parse(localStorage.getItem('currentPositionJSON'));
+                let selfPos = JSON.parse(sessionStorage.getItem('currentPositionJSON'));
                 // Refresh distance
                 let distTimerId = setInterval(() => {
                     let dist = AMap.GeometryUtil.distance(targetPos, [selfPos.lng, selfPos.lat]).toFixed(2);
                     document.getElementById('dist-p').innerHTML = dist + 'm';
-                }, 100);
-                localStorage.setItem('distTimerId', distTimerId.toString());
+                }, 500);
+                sessionStorage.setItem('distTimerId', distTimerId.toString());
                 // Print POI info
                 document.getElementById('target-name').innerHTML = '已选择位置：' + marker.target.D.title;
                 document.getElementById('visit-status').innerHTML = '上次访问：' + '上次访问时间';
-                // Print accessability
-                let dist = AMap.GeometryUtil.distance(targetPos, [selfPos.lng, selfPos.lat]).toFixed(2);
-                dist < 50 ? document.getElementById('access-p').innerHTML = '可访问' : document.getElementById('access-p').innerHTML = '太远啦';
-
-
+                
                 // Visit interaction 访问地点逻辑
+                let dist = AMap.GeometryUtil.distance(targetPos, [selfPos.lng, selfPos.lat]).toFixed(2);
+                if (dist < 150) {
+                    document.getElementById('access-p').innerHTML = '可访问';
+                }
+                else {
+                    document.getElementById('access-p').innerHTML = '太远啦';
+                }
+            });
 
-
-
-
+            
+            // 地点访问逻辑
+            oldMarkerArray[i].on('touchstart', (marker) => {
+                // 绑定访问按钮
+                addEventListener('touchstart', () => {
+                    let oldName = JSON.parse(localStorage.getItem('lastVisitInfo')).name;
+                    if (oldName === marker.target.D.title) {
+                        // Update visit record
+                        let newVisitDate = new Date();
+                        let oldVisitDate = JSON.parse(localStorage.getItem('lastVisitInfo')).visitTime;
+                        if ((newVisitDate-oldVisitDate) >= 24*60*60*1000) {
+                            console.log('visit');
+                            let temp = JSON.parse(localStorage.getItem('lastVisitInfo'));
+                            temp.visitTime = newVisitDate;
+                            temp = JSON.stringify(temp);
+                            localStorage.setItem('lastVisitInfo', temp);
+                        }
+                        else {
+                            console.log('You have already visited here!');
+                            
+                        }
+                    }
+                    else {
+                        // Create new visit record
+                        console.log('new record push in');
+                        let lastVisitInfo = {
+                            name: marker.target.D.title,
+                            position: targetPos,
+                            visitTime: new Date()
+                        }
+                        lastVisitInfo = JSON.stringify(lastVisitInfo);
+                        localStorage.setItem('lastVisitInfo', lastVisitInfo);
+                    }
+                });
             });
         }
     });

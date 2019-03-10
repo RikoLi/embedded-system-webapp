@@ -36,3 +36,6 @@ Embedded system assignment 3.
 
 ## 其他
 * 最后报告中做一下简单需求分析
+
+## Journal
+3.10 重构marker部分的事件监听（未完成），逻辑待理清
