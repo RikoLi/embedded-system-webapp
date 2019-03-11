@@ -1,3 +1,46 @@
+/**
+ * 函数定义
+ * 
+ * 格式建议：
+ * 语句内的回调函数使用arrow function
+ * 其他使用传统function
+ */
+// Time display
+setInterval(() => {
+    let date = new Date();
+    sec = date.getSeconds().toString();
+    min = date.getMinutes().toString();
+    hour = date.getHours().toString();
+    document.getElementById('time-p').innerHTML = hour + ':' + min + ':' + sec;
+}, 1000);
+
+// 按钮事件
+function openStatus() {
+    // 
+}
+function openItem() {
+    button = document.getElementById('item-button');
+}
+function openCam() {
+    button = document.getElementById('camera-button');
+}
+
+// 探索随机游戏事件
+function createRandGameEvent() {
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
 // Initialize Amap
 let map = new AMap.Map('container', {
     resizeEnable: true,
@@ -38,25 +81,7 @@ map.plugin('AMap.Geolocation', () => {
     });
 });
 
-// Time display
-setInterval(() => {
-    let date = new Date();
-    sec = date.getSeconds().toString();
-    min = date.getMinutes().toString();
-    hour = date.getHours().toString();
-    document.getElementById('time-p').innerHTML = hour + ':' + min + ':' + sec;
-}, 1000);
 
-// Button click events
-let openStatus = () => {
-    // 
-}
-let openItem = () => {
-    button = document.getElementById('item-button');
-}
-let openCam = () => {
-    button = document.getElementById('camera-button');
-}
 
 /**
 * 地图交互
@@ -93,7 +118,15 @@ AMapUI.loadUI(['misc/PositionPicker'], (PositionPicker) => {
             oldMarkerArray.push(marker);
         }
         
+   
+        
+        // Info display
         for (let i = 0; i < oldMarkerArray.length; i++) {
+            // Select current marker
+            oldMarkerArray[i].on('touchstart', (marker) => {
+                let name = marker.target.D.title;
+                sessionStorage.setItem('selectMarker', name);
+            });
             // POI touch events
             oldMarkerArray[i].on('touchstart', (marker) => {
                 // Timer reset
@@ -112,57 +145,90 @@ AMapUI.loadUI(['misc/PositionPicker'], (PositionPicker) => {
                 sessionStorage.setItem('distTimerId', distTimerId.toString());
                 // Print POI info
                 document.getElementById('target-name').innerHTML = '已选择位置：' + marker.target.D.title;
-                document.getElementById('visit-status').innerHTML = '上次访问：' + '上次访问时间';
                 
-                // Visit interaction 访问地点逻辑
+                // Visit interaction 探索地点逻辑
                 let dist = AMap.GeometryUtil.distance(targetPos, [selfPos.lng, selfPos.lat]).toFixed(2);
                 if (dist < 150) {
-                    document.getElementById('access-p').innerHTML = '可访问';
+                    sessionStorage.setItem('enableVisit', 'true');
+                    document.getElementById('access-p').innerHTML = '可到达';
                 }
                 else {
-                    document.getElementById('access-p').innerHTML = '太远啦';
+                    sessionStorage.setItem('enableVisit', 'false');
+                    document.getElementById('access-p').innerHTML = '太远';
                 }
             });
         }
 
 
-
-        for (let i = 0; i < oldMarkerArray.length; i++) {
-            // 地点访问逻辑
-            oldMarkerArray[i].on('touchstart', (marker) => {
-                let name = marker.target.D.title;
-                sessionStorage.setItem('selectMarker', name);
-            });
-        }
 
     });
     positionPicker.start();
 });
 
 
-// 绑定访问按钮
+
+
+
+
+
+
+
+
+
+
+// 绑定探索按钮
 document.getElementById('visit-button').addEventListener('touchstart', () => {
     let selectMarker = sessionStorage.getItem('selectMarker');
-    // Is visited?
-    if (localStorage.getItem(selectMarker) === null) {
-        console.log('new visit');
-        let newVisit = {lastVisit: new Date()};
-        newVisit = JSON.stringify(newVisit);
-        localStorage.setItem(selectMarker, newVisit);
-    }
-    else {
-        let lastVisit = JSON.parse(localStorage.getItem(selectMarker)).lastVisit;
-        let newDate = new Date();
-        console.log('last visit: '+lastVisit);
-        if (newDate - lastVisit > 24*60*60*1000) {
-            console.log('visit again');
-            let newVisit = {lastVisit: newDate};
+    // Accessibility
+    if (sessionStorage.getItem('enableVisit') === 'true') {
+        // Never visited
+        if (localStorage.getItem(selectMarker) === null) {
+            let date = new Date();
+            let newVisit = {
+                lastVisit: date.getTime(),
+                lastVisitDisp: date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate()+' '+date.getHours()+':'+date.getMinutes()+':'+date.getSeconds()
+            };
+            // Visit
+            alert('探索成功！这是您第一次到达此地点。');
+            // Update visit info
             newVisit = JSON.stringify(newVisit);
             localStorage.setItem(selectMarker, newVisit);
+
+            // 随机游戏事件...
+
+
+
         }
+        // Have visited
         else {
-            console.log('have visited');
+            let lastVisit = JSON.parse(localStorage.getItem(selectMarker)).lastVisit;
+            let lastVisitTime = JSON.parse(localStorage.getItem(selectMarker)).lastVisitDisp;
+            let date = new Date();
+            if (date - lastVisit >= 3*60*60*1000) { // Set visit refresh time
+                let newVisit = {
+                    lastVisit: date.getTime(),
+                    lastVisitDisp: date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate()+' '+date.getHours()+':'+date.getMinutes()+':'+date.getSeconds()
+                };
+                // Visit
+                alert('探索成功！\n上次探索时间：'+lastVisitTime);
+                // Update visit info
+                newVisit = JSON.stringify(newVisit);
+                localStorage.setItem(selectMarker, newVisit);
+
+
+                // 随机游戏事件...
+
+
+
+            }
+            else {
+                let remainTime = (3 - (date - lastVisit)/1000/60/60).toFixed(2);
+                alert('您不久前已经探索了该据点！\n上次探索时间：'+lastVisitTime+'\n距该点恢复下次探索还有'+remainTime+'小时。');
+            }
         }
+    }
+    else {
+        alert('目标太远，无法探索！');
     }
 });
 
