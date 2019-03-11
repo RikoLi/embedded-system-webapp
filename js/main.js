@@ -148,7 +148,7 @@ AMapUI.loadUI(['misc/PositionPicker'], (PositionPicker) => {
                 
                 // Visit interaction 探索地点逻辑
                 let dist = AMap.GeometryUtil.distance(targetPos, [selfPos.lng, selfPos.lat]).toFixed(2);
-                if (dist < 150) {
+                if (dist < 50) {
                     sessionStorage.setItem('enableVisit', 'true');
                     document.getElementById('access-p').innerHTML = '可到达';
                 }
