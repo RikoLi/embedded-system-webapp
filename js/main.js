@@ -91,6 +91,9 @@ AMapUI.loadUI(['misc/PositionPicker'], (PositionPicker) => {
             });
             map.add(marker);
             oldMarkerArray.push(marker);
+        }
+        
+        for (let i = 0; i < oldMarkerArray.length; i++) {
             // POI touch events
             oldMarkerArray[i].on('touchstart', (marker) => {
                 // Timer reset
@@ -120,46 +123,52 @@ AMapUI.loadUI(['misc/PositionPicker'], (PositionPicker) => {
                     document.getElementById('access-p').innerHTML = '太远啦';
                 }
             });
+        }
 
-            
+
+
+        for (let i = 0; i < oldMarkerArray.length; i++) {
             // 地点访问逻辑
             oldMarkerArray[i].on('touchstart', (marker) => {
-                // 绑定访问按钮
-                addEventListener('touchstart', () => {
-                    let oldName = JSON.parse(localStorage.getItem('lastVisitInfo')).name;
-                    if (oldName === marker.target.D.title) {
-                        // Update visit record
-                        let newVisitDate = new Date();
-                        let oldVisitDate = JSON.parse(localStorage.getItem('lastVisitInfo')).visitTime;
-                        if ((newVisitDate-oldVisitDate) >= 24*60*60*1000) {
-                            console.log('visit');
-                            let temp = JSON.parse(localStorage.getItem('lastVisitInfo'));
-                            temp.visitTime = newVisitDate;
-                            temp = JSON.stringify(temp);
-                            localStorage.setItem('lastVisitInfo', temp);
-                        }
-                        else {
-                            console.log('You have already visited here!');
-                            
-                        }
-                    }
-                    else {
-                        // Create new visit record
-                        console.log('new record push in');
-                        let lastVisitInfo = {
-                            name: marker.target.D.title,
-                            position: targetPos,
-                            visitTime: new Date()
-                        }
-                        lastVisitInfo = JSON.stringify(lastVisitInfo);
-                        localStorage.setItem('lastVisitInfo', lastVisitInfo);
-                    }
-                });
+                let name = marker.target.D.title;
+                sessionStorage.setItem('selectMarker', name);
             });
         }
+
     });
     positionPicker.start();
 });
+
+
+// 绑定访问按钮
+document.getElementById('visit-button').addEventListener('touchstart', () => {
+    let selectMarker = sessionStorage.getItem('selectMarker');
+    // Is visited?
+    if (localStorage.getItem(selectMarker) === null) {
+        console.log('new visit');
+        let newVisit = {lastVisit: new Date()};
+        newVisit = JSON.stringify(newVisit);
+        localStorage.setItem(selectMarker, newVisit);
+    }
+    else {
+        let lastVisit = JSON.parse(localStorage.getItem(selectMarker)).lastVisit;
+        let newDate = new Date();
+        console.log('last visit: '+lastVisit);
+        if (newDate - lastVisit > 24*60*60*1000) {
+            console.log('visit again');
+            let newVisit = {lastVisit: newDate};
+            newVisit = JSON.stringify(newVisit);
+            localStorage.setItem(selectMarker, newVisit);
+        }
+        else {
+            console.log('have visited');
+        }
+    }
+});
+
+
+
+
 
 
 /**
