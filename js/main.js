@@ -18,7 +18,7 @@ function openCam() {
 }
 
 // 探索随机游戏事件
-function createRandGameEvent(place) {
+function randGameEvent(place) {
     let hour = (new Date()).getHours();
     let eventToken = Math.random();
     
@@ -217,9 +217,9 @@ document.getElementById('visit-button').addEventListener('touchstart', () => {
             localStorage.setItem(selectMarker, newVisit);
 
             // 随机游戏事件...
-
-
-
+            randGameEvent(selectMarker);
+            
+            
         }
         // Have visited
         else {
@@ -238,12 +238,13 @@ document.getElementById('visit-button').addEventListener('touchstart', () => {
                 // Update visit info
                 newVisit = JSON.stringify(newVisit);
                 localStorage.setItem(selectMarker, newVisit);
-
-
+                
+                
                 // 随机游戏事件...
-
-
-
+                randGameEvent(selectMarker);
+                
+                
+                
             }
             else {
                 let remainTime = (3 - (date - lastVisit)/1000/60/60).toFixed(2);
