@@ -106,6 +106,56 @@ class ItemManager {
 }
 let IManager = new ItemManager();
 
+class HPManager {
+    constructor(init_HP, init_max_HP) {
+        let currentHP = 0;
+        let maxHP = 0;
+        if (localStorage.getItem('HP') === null) {
+            let HP = {
+                currentHP: init_HP,
+                maxHP: init_max_HP
+            };
+            HP = JSON.stringify(HP);
+            localStorage.setItem('HP', HP);
+        }
+        else {
+            currentHP = JSON.parse(localStorage.getItem('HP')).currentHP;
+            maxHP = JSON.parse(localStorage.getItem('HP')).maxHP;
+        }
+        document.getElementById('hp-p').innerHTML = currentHP.toString() + '/' + maxHP.toString();
+    }
+    addHP(value) {
+        let HP = JSON.parse(localStorage.getItem('HP'));
+        if (value > HP.maxHP - HP.currentHP) {
+            HP.currentHP = HP.maxHP;
+        }
+        else {
+            HP.currentHP += value;
+        }
+        HP = JSON.stringify(HP);
+        localStorage.setItem('HP', HP);
+    }
+    reduceHP(value) {
+        
+    }
+    recoverHP(value, time_ms) {
+        setInterval(() => {
+            let HP = JSON.parse(localStorage.getItem('HP'));
+            if (value > HP.maxHP - HP.currentHP) {
+                HP.currentHP = HP.maxHP;
+            }
+            else {
+                HP.currentHP += value;
+            }
+            document.getElementById('hp-p').innerHTML = HP.currentHP.toString() + '/' + HP.maxHP.toString();
+            HP = JSON.stringify(HP);
+            localStorage.setItem('HP', HP);
+        }, time_ms);
+    }
+}
+let HM = new HPManager(50, 100);
+HM.recoverHP(1, 360*1000);
+
 
 
 
