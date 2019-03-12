@@ -14,10 +14,10 @@ Embedded system assignment 3.
     * 相机？
 
 ## 内容
-* 简单的HTML布局 done
-* GPS定位 done
+* 简单的HTML布局
+* GPS定位
 * 现实交互型小游戏
-    * 地图交互（事件触发） done
+    * 地图交互（事件触发）
     * 物品收集类RPG
     * 等级
     * 生命
@@ -38,4 +38,7 @@ Embedded system assignment 3.
 * 最后报告中做一下简单需求分析
 
 ## Journal
+3.10前 建立了基本UI和功能框架，确定了整体功能
 3.10 重构marker部分的事件监听（未完成），逻辑待理清
+3.11 完成了marker事件监听的重构
+3.12 完成了道具系统框架
