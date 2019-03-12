@@ -1,3 +1,6 @@
+// 导入item.js
+import ItemManager from 'ItemManager.js'
+import itemLib from 'item_lib.js';
 /**
  * 函数定义
  * 
@@ -25,10 +28,10 @@ function randGameEvent(place) {
     
     // Event time
     if (hour >= 7 && hour < 19) {
-        let eventType = eventToken > 7 ? 'battle' : 'forage';
+        let eventType = eventToken > 0.7 ? 'battle' : 'forage';
     }
     else {
-        let eventType = eventToken > 5 ? 'battle' : 'forage';
+        let eventType = eventToken > 0.5 ? 'battle' : 'forage';
     }
     
     
