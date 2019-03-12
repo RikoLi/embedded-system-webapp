@@ -5,14 +5,6 @@
  * 语句内的回调函数使用arrow function
  * 其他使用传统function
  */
-// Time display
-setInterval(() => {
-    let date = new Date();
-    sec = date.getSeconds().toString();
-    min = date.getMinutes().toString();
-    hour = date.getHours().toString();
-    document.getElementById('time-p').innerHTML = hour + ':' + min + ':' + sec;
-}, 1000);
 
 // 按钮事件
 function openStatus() {
@@ -26,8 +18,29 @@ function openCam() {
 }
 
 // 探索随机游戏事件
-function createRandGameEvent() {
-
+function createRandGameEvent(place) {
+    let hour = (new Date()).getHours();
+    let eventToken = Math.random();
+    
+    
+    // Event time
+    if (hour >= 7 && hour < 19) {
+        let eventType = eventToken > 7 ? 'battle' : 'forage';
+    }
+    else {
+        let eventType = eventToken > 5 ? 'battle' : 'forage';
+    }
+    
+    
+    
+    switch (eventType) {
+        case 'battle':
+        // Battle event
+        break;
+        case 'forage':
+        // Forage event
+        break;
+    }
 }
 
 
@@ -68,7 +81,7 @@ map.plugin('AMap.Geolocation', () => {
     let position = [];
     map.addControl(geolocation);
     if (window.navigator.userAgent === 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36')
-        geolocation.getCurrentPosition();//For PC users
+    geolocation.getCurrentPosition();//For PC users
     else geolocation.watchPosition();    //For mobile users
     AMap.event.addListener(geolocation, 'complete', (data) => {
         document.getElementById('current-pos').innerHTML = '当前位置：'+'['+data.position.lng+', '+data.position.lat+']';
@@ -84,9 +97,9 @@ map.plugin('AMap.Geolocation', () => {
 
 
 /**
-* 地图交互
-* 用于用户点击地图上可交互对象时进行交互
-*/
+ * 地图交互
+ * 用于用户点击地图上可交互对象时进行交互
+ */
 AMapUI.loadUI(['misc/PositionPicker'], (PositionPicker) => {
     let positionPicker = new PositionPicker({
         mode:'dragMap',//设定为拖拽地图模式，可选'dragMap'、'dragMarker'，默认为'dragMap'
@@ -118,7 +131,7 @@ AMapUI.loadUI(['misc/PositionPicker'], (PositionPicker) => {
             oldMarkerArray.push(marker);
         }
         
-   
+        
         
         // Info display
         for (let i = 0; i < oldMarkerArray.length; i++) {
@@ -148,7 +161,7 @@ AMapUI.loadUI(['misc/PositionPicker'], (PositionPicker) => {
                 
                 // Visit interaction 探索地点逻辑
                 let dist = AMap.GeometryUtil.distance(targetPos, [selfPos.lng, selfPos.lat]).toFixed(2);
-                if (dist < 50) {
+                if (dist < 150) {
                     sessionStorage.setItem('enableVisit', 'true');
                     document.getElementById('access-p').innerHTML = '可到达';
                 }
@@ -158,13 +171,21 @@ AMapUI.loadUI(['misc/PositionPicker'], (PositionPicker) => {
                 }
             });
         }
-
-
-
+        
+        
+        
     });
     positionPicker.start();
 });
 
+// Time display
+setInterval(() => {
+    let date = new Date();
+    sec = date.getSeconds().toString();
+    min = date.getMinutes().toString();
+    hour = date.getHours().toString();
+    document.getElementById('time-p').innerHTML = hour + ':' + min + ':' + sec;
+}, 1000);
 
 
 
@@ -186,10 +207,11 @@ document.getElementById('visit-button').addEventListener('touchstart', () => {
             let date = new Date();
             let newVisit = {
                 lastVisit: date.getTime(),
-                lastVisitDisp: date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate()+' '+date.getHours()+':'+date.getMinutes()+':'+date.getSeconds()
+                lastVisitDisp: date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate()+' '+date.getHours()+':'+date.getMinutes()+':'+date.getSeconds(),
+                visitTimes: 1
             };
             // Visit
-            alert('探索成功！这是您第一次到达此地点。');
+            alert('探索成功！这是您第一次到达此地点['+selectMarker+']。');
             // Update visit info
             newVisit = JSON.stringify(newVisit);
             localStorage.setItem(selectMarker, newVisit);
@@ -203,14 +225,16 @@ document.getElementById('visit-button').addEventListener('touchstart', () => {
         else {
             let lastVisit = JSON.parse(localStorage.getItem(selectMarker)).lastVisit;
             let lastVisitTime = JSON.parse(localStorage.getItem(selectMarker)).lastVisitDisp;
+            let oldVisitTimes = JSON.parse(localStorage.getItem(selectMarker)).visitTimes;
             let date = new Date();
             if (date - lastVisit >= 3*60*60*1000) { // Set visit refresh time
                 let newVisit = {
                     lastVisit: date.getTime(),
-                    lastVisitDisp: date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate()+' '+date.getHours()+':'+date.getMinutes()+':'+date.getSeconds()
+                    lastVisitDisp: date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate()+' '+date.getHours()+':'+date.getMinutes()+':'+date.getSeconds(),
+                    visitTimes: ++oldVisitTimes
                 };
                 // Visit
-                alert('探索成功！\n上次探索时间：'+lastVisitTime);
+                alert('['+selectMarker+']探索成功！\n上次探索时间：'+lastVisitTime+'\n您一共已经探索了'+oldVisitTimes+'次。');
                 // Update visit info
                 newVisit = JSON.stringify(newVisit);
                 localStorage.setItem(selectMarker, newVisit);
@@ -223,7 +247,7 @@ document.getElementById('visit-button').addEventListener('touchstart', () => {
             }
             else {
                 let remainTime = (3 - (date - lastVisit)/1000/60/60).toFixed(2);
-                alert('您不久前已经探索了该据点！\n上次探索时间：'+lastVisitTime+'\n距该点恢复下次探索还有'+remainTime+'小时。');
+                alert('您不久前已经探索了该据点['+selectMarker+']！\n上次探索时间：'+lastVisitTime+'\n您一共已经探索了'+oldVisitTimes+'次。\n距该点恢复下次探索还有'+remainTime+'小时。');
             }
         }
     }
@@ -237,9 +261,7 @@ document.getElementById('visit-button').addEventListener('touchstart', () => {
 
 
 
-/**
-* 数据存储（使用新API localStorage）
-*/
+
 
 
 
