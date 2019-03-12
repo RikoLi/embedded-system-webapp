@@ -44,6 +44,32 @@ class ItemManager {
         }
     }
 
+    removeItem(name) {
+        let removeNum = prompt('输入丢弃数目（正整数）：');
+        if (typeof(removeNum) === 'number' && confirm('确定要丢弃吗？')) {
+            let bagArray = JSON.parse(localStorage.getItem('bag'));
+            for (let i = 0; i < bagArray.length; i++) {
+                if (bagArray[i].name === name) {
+                    if (removeNum > bagArray[i].number) {
+                        removeNum = bagArray[i].number;
+                    }
+                    bagArray[i].number -= removeNum;
+                    if (bagArray[i].number <= 0) {
+                        bagArray[i].splice(i, 1);
+                    }
+                    let temp = JSON.stringify(bagArray);
+                    localStorage.setItem('bag', temp);
+                    alert('你丢弃了'+removeNum+'个'+name+'！');
+                    break;
+                }
+            }
+        }
+        else {
+            alert('输入信息非法！');
+        }
+    }
+
+
     useItem(name) {
         let bagArray = JSON.parse(localStorage.getItem('bag'));
         for (let i = 0; i < bagArray.length; i++) {
