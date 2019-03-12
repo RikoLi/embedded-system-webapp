@@ -1,6 +1,133 @@
-// 导入item.js
-import ItemManager from 'ItemManager.js'
-import itemLib from 'item_lib.js';
+/**
+ * 道具管理类
+ * 使用export暴露给main.js
+*/
+// Define ItemManager class
+class ItemManager {
+    constructor() {
+        // Create a bag array
+        let bagArray = [];
+        bagArray = JSON.stringify(bagArray);
+        localStorage.setItem('bag', bagArray);
+    }
+
+
+    addItem(id, name, number, type, info) {
+        let bagArray = JSON.parse(localStorage.getItem('bag'));
+        let enableNew = true;
+
+        // Add old item
+        for (let i = 0; i < bagArray.length; i++) {
+            if (bagArray[i].name === name) {
+                bagArray[i].number += number;
+                let temp = JSON.stringify(bagArray);
+                localStorage.setItem('bag', temp);
+                alert('你获得了'+number+'个'+name+'！');
+
+                enableNew = false;
+                break;
+            }
+        }
+        if (enableNew) {
+            // Add new item
+            let item = {
+                id: id, //Number
+                name: name, //String
+                number: number, //Number
+                type: type, //String
+                info: info //String
+            }
+            bagArray.push(item);
+            let temp = JSON.stringify(bagArray);
+            localStorage.setItem('bag', temp);
+            alert('你获得了'+number+'个'+name+'！');
+        }
+    }
+
+    useItem(name) {
+        let bagArray = JSON.parse(localStorage.getItem('bag'));
+        for (let i = 0; i < bagArray.length; i++) {
+            if (bagArray[i].name === name) {
+                if (bagArray[i].number-1 === 0) {
+                    bagArray.splice(i, 1);
+                }
+                else {
+                    --bagArray[i].number;
+                }
+                let temp = JSON.stringify(bagArray);
+                localStorage.setItem('bag', temp);
+                this.applyItemEffect(name);
+                break;
+            }
+        }
+    }
+
+    // Item effects
+    applyItemEffect(name) {
+        alert('Use'+name); //Test
+        // switch(id) {
+        //     case 0:
+        //     alert('使用了'+itemLib[id].name);
+        //     break;
+
+            
+        //     // To be continued...
+        //     case 1:
+            
+        //     break;
+        // }
+    }
+}
+let IManager = new ItemManager();
+
+
+
+
+/**
+ * 道具库
+*/
+const itemLib = [
+    {
+        id: 0,
+        name: '小刀',
+        type: 'weapon',
+        info: '一把普通的折叠刀。'
+    },
+    {
+        id: 1,
+        name: '水管',
+        type: 'weapon',
+        info: '建筑器材，不俗的钝器。'
+    },
+    {
+        id: 2,
+        name: '棒球棒',
+        type: 'weapon',
+        info: '运动场上的杀手。'
+    },
+    {
+        id: 3,
+        name: '消防斧',
+        type: 'weapon',
+        info: '笨重、强大的锋利武器。'
+    },
+    {
+        id: 4,
+        name: '止痛药',
+        type: 'medicine',
+        info: '暂时缓解疼痛，回复少许生命，效果有限。'
+    },
+    {
+        id: 5,
+        name: '绷带',
+        type: 'medicine',
+        info: '起到止血的效果，回复少许生命。'
+    }
+];
+
+
+
+
 /**
  * 函数定义
  * 
@@ -24,14 +151,14 @@ function openCam() {
 function randGameEvent(place) {
     let hour = (new Date()).getHours();
     let eventToken = Math.random();
-    
+    let eventType = '';
     
     // Event time
     if (hour >= 7 && hour < 19) {
-        let eventType = eventToken > 0.7 ? 'battle' : 'forage';
+        eventType = eventToken > 5 ? 'battle' : 'forage';
     }
     else {
-        let eventType = eventToken > 0.5 ? 'battle' : 'forage';
+        eventType = eventToken > 0.5 ? 'battle' : 'forage';
     }
     
     
@@ -39,20 +166,21 @@ function randGameEvent(place) {
     switch (eventType) {
         case 'battle':
         // Battle event
+
+
+
+
+        
         break;
         case 'forage':
-        // Forage event
+        // Forage event\
+        alert('foraging...')
+
+
+
         break;
     }
 }
-
-
-
-
-
-
-
-
 
 
 
@@ -189,12 +317,6 @@ setInterval(() => {
     hour = date.getHours().toString();
     document.getElementById('time-p').innerHTML = hour + ':' + min + ':' + sec;
 }, 1000);
-
-
-
-
-
-
 
 
 

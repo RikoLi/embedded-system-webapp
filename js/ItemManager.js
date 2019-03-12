@@ -2,9 +2,8 @@
  * 道具管理类
  * 使用export暴露给main.js
 */
-
 // Define ItemManager class
-export class ItemManager {
+class ItemManager {
     constructor() {
         // Create a bag array
         let bagArray = [];
@@ -23,6 +22,8 @@ export class ItemManager {
                 bagArray[i].number += number;
                 let temp = JSON.stringify(bagArray);
                 localStorage.setItem('bag', temp);
+                alert('你获得了'+number+'个'+name+'！');
+
                 enableNew = false;
                 break;
             }
@@ -43,6 +44,7 @@ export class ItemManager {
             bagArray.push(item);
             let temp = JSON.stringify(bagArray);
             localStorage.setItem('bag', temp);
+            alert('你获得了'+number+'个'+name+'！');
         }
     }
 
@@ -66,10 +68,18 @@ export class ItemManager {
 
     // Item effects
     applyItemEffect(id) {
-        switch(id) {
-            case 0:
-                break;
-        }
+        alert('Use'+itemLib[id].name); //Test
+        // switch(id) {
+        //     case 0:
+        //     alert('使用了'+itemLib[id].name);
+        //     break;
+
+            
+        //     // To be continued...
+        //     case 1:
+            
+        //     break;
+        // }
     }
 }
 

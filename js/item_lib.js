@@ -4,7 +4,7 @@
 
 // Create item library
 
-export const lib = [
+const lib = [
     {
         id: 0,
         name: '小刀',
