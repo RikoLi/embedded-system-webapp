@@ -124,6 +124,7 @@ class HPManager {
         }
         document.getElementById('hp-p').innerHTML = currentHP.toString() + '/' + maxHP.toString();
     }
+
     addHP(value) {
         let HP = JSON.parse(localStorage.getItem('HP'));
         if (value > HP.maxHP - HP.currentHP) {
@@ -136,7 +137,18 @@ class HPManager {
         localStorage.setItem('HP', HP);
     }
     reduceHP(value) {
-        
+        let HP = JSON.parse(localStorage.getItem('HP'));
+        alert('受到'+value+'点伤害');
+        if (value > HP.currentHP) {
+            HP.currentHP = 0;
+            alert('你死了...复活后道具栏将清空。');
+            HP.currentHP = 10;
+        }
+        else {
+            HP.currentHP -= value;
+        }
+        HP = JSON.stringify(HP);
+        localStorage.setItem('HP', HP);
     }
     recoverHP(value, time_ms) {
         setInterval(() => {
@@ -242,18 +254,22 @@ function randGameEvent(place) {
     switch (eventType) {
         case 'battle':
         // Battle event
-
-
-
-
-        
+        alert('你被别人袭击了！');
+        let damage = (Math.random() * 24 + 1).toFixed(0);
+        HM.reduceHP(damage);        
         break;
+
         case 'forage':
-        // Forage event\
-        alert('foraging...')
-
-
-
+        // Forage event
+        let getAmount = (Math.random() * 3).toFixed(0);
+        if (getAmount === 0) {
+            ++ getAmount;
+        }
+        
+        for (let i = 0; i < getAmount; i ++) {
+            let itemSeed = (Math.random() * (itemLib.length-1)).toFixed(0);
+            IManager.addItem(itemSeed, itemLib[itemSeed].name, 1, itemLib[itemSeed].type, itemLib[itemSeed].info);
+        }
         break;
     }
 }
