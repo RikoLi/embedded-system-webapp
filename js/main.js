@@ -11,6 +11,17 @@ class ItemManager {
         localStorage.setItem('bag', bagArray);
     }
 
+    checkWeapon() {
+        let bagArray = JSON.parse(localStorage.getItem('bag'));
+        let weapon_amount = 0;
+        for (let i = 0; i < bagArray.length; i ++) {
+            if (bagArray[i].type === 'weapon') {
+                ++ weapon_amount;
+            }
+        }
+        return weapon_amount;
+    }
+
 
     addItem(id, name, number, type, info) {
         let bagArray = JSON.parse(localStorage.getItem('bag'));
@@ -240,6 +251,7 @@ function randGameEvent(place) {
     let hour = (new Date()).getHours();
     let eventToken = Math.random();
     let eventType = '';
+    let weapon_amount = IManager.checkWeapon();
     
     // Event time
     if (hour >= 7 && hour < 19) {
@@ -254,13 +266,14 @@ function randGameEvent(place) {
     switch (eventType) {
         case 'battle':
         // Battle event
-        alert('你被别人袭击了！');
+        alert('你在'+place+'被别人袭击了！');
         let damage = (Math.random() * 24 + 1).toFixed(0);
         HM.reduceHP(damage);        
         break;
 
         case 'forage':
         // Forage event
+        alert('你在'+place+'发现了一些物品...');
         let getAmount = (Math.random() * 3).toFixed(0);
         if (getAmount === 0) {
             ++ getAmount;
