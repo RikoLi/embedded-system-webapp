@@ -1,6 +1,5 @@
 /**
  * 道具管理类
- * 使用export暴露给main.js
 */
 // Define ItemManager class
 class ItemManager {
@@ -80,6 +79,19 @@ class ItemManager {
         }
     }
 
+    dropItem() {
+        let bagArray = JSON.parse(localStorage.getItem('bag'));
+        let item = bagArray.pop();
+
+        if (item === undefined) {
+            alert('背包已空！');
+        }
+        else {
+            alert('你丢失了'+item.name+'！');
+        }
+        localStorage.setItem('bag', JSON.stringify(bagArray));
+    }
+
 
     useItem(name) {
         let bagArray = JSON.parse(localStorage.getItem('bag'));
@@ -153,6 +165,12 @@ class HPManager {
         if (value > HP.currentHP) {
             HP.currentHP = 0;
             alert('你死了...复活后道具栏将清空。');
+            // Reset bag
+            let bagArray = [];
+            bagArray = JSON.stringify(bagArray);
+            localStorage.setItem('bag', bagArray);
+            
+            // Reset HP
             HP.currentHP = 10;
         }
         else {
@@ -239,29 +257,30 @@ const itemLib = [
 function openStatus() {
     // 
 }
+
 function openItem() {
-    button = document.getElementById('item-button');
+    window.open('item.html', '__self');
 }
+
 function openCam() {
     button = document.getElementById('camera-button');
 }
 
+
+
+
+
+
 // 探索随机游戏事件
 function randGameEvent(place) {
-    let hour = (new Date()).getHours();
-    let eventToken = Math.random();
     let eventType = '';
+
+    // 武器越多，战斗概率越小
     let weapon_amount = IManager.checkWeapon();
+    let seed = Math.pow(2, 1/(weapon_amount+Math.random()))
     
-    // Event time
-    if (hour >= 7 && hour < 19) {
-        eventType = eventToken > 5 ? 'battle' : 'forage';
-    }
-    else {
-        eventType = eventToken > 0.5 ? 'battle' : 'forage';
-    }
-    
-    
+    // Event type
+    eventType = seed < 0.5 ? 'battle' : 'forage';   
     
     switch (eventType) {
         case 'battle':
@@ -273,15 +292,24 @@ function randGameEvent(place) {
 
         case 'forage':
         // Forage event
-        alert('你在'+place+'发现了一些物品...');
-        let getAmount = (Math.random() * 3).toFixed(0);
-        if (getAmount === 0) {
-            ++ getAmount;
+        let eventSeed = Math.random();
+        if (eventSeed < 0.9) {
+            // Random event: get items
+            alert('你在'+place+'发现了一些物品...');
+            let getAmount = (Math.random() * 3).toFixed(0);
+            if (getAmount === 0) {
+                ++ getAmount;
+            }
+            
+            for (let i = 0; i < getAmount; i ++) {
+                let itemSeed = (Math.random() * (itemLib.length-1)).toFixed(0);
+                IManager.addItem(itemSeed, itemLib[itemSeed].name, 1, itemLib[itemSeed].type, itemLib[itemSeed].info);
+            }
         }
-        
-        for (let i = 0; i < getAmount; i ++) {
-            let itemSeed = (Math.random() * (itemLib.length-1)).toFixed(0);
-            IManager.addItem(itemSeed, itemLib[itemSeed].name, 1, itemLib[itemSeed].type, itemLib[itemSeed].info);
+        else {
+            // Random event: drop items
+            alert('糟糕！你的背包被划破了，随机丢掉一组物品！');
+            IManager.dropItem();
         }
         break;
     }
