@@ -96,11 +96,20 @@ body {
     display: flex;
     flex-direction: column;
     margin: 10px auto;
-    height: 400px;
+    height: 350px;
     border-style: solid;
     border-color: black;
     border-radius: 10px;
     border-width: 5px; 
+    justify-content: center;
+    align-items: center;
+}
+#form-div {
+    display: flex;
+    flex-direction: column;
+    margin: 20px auto;
+    justify-content: center;
+    align-items: center;
 }
 #item-title-div {
     display: flex;
@@ -176,4 +185,14 @@ body {
     margin: 0 auto;
     
     word-wrap: break-word;
-	word-break: break-all;
+    word-break: break-all;
+}
+.item-area-p {
+    display: flex;
+    flex-basis: 25%;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 20px;
+    color: black;
+}

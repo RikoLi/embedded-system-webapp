@@ -58,7 +58,7 @@ class ItemManager {
 
     removeItem(name) {
         let removeNum = prompt('输入丢弃数目（正整数）：');
-        if (typeof(removeNum) === 'number' && confirm('确定要丢弃吗？')) {
+        if (typeof(Number(removeNum)) === 'number' && confirm('确定要丢弃吗？')) {
             let bagArray = JSON.parse(localStorage.getItem('bag'));
             for (let i = 0; i < bagArray.length; i++) {
                 if (bagArray[i].name === name) {
@@ -67,7 +67,7 @@ class ItemManager {
                     }
                     bagArray[i].number -= removeNum;
                     if (bagArray[i].number <= 0) {
-                        bagArray[i].splice(i, 1);
+                        bagArray.splice(i, 1);
                     }
                     let temp = JSON.stringify(bagArray);
                     localStorage.setItem('bag', temp);
@@ -256,10 +256,6 @@ const itemLib = [
  */
 
 // 按钮事件
-function openStatus() {
-    // 
-}
-
 function openItem() {
     window.open('item.html', '__self');
 }
@@ -267,11 +263,6 @@ function openItem() {
 function openCam() {
     button = document.getElementById('camera-button');
 }
-
-
-
-
-
 
 // 探索随机游戏事件
 function randGameEvent(place) {
