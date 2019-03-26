@@ -108,6 +108,13 @@ body {
     margin: 10px auto;
     height: 30px;
 }
+#item-title-p {
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-size: 30px;
+}
 
 
 .menu-button-div {
