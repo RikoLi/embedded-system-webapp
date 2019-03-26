@@ -5,9 +5,11 @@
 class ItemManager {
     constructor() {
         // Create a bag array
-        let bagArray = [];
-        bagArray = JSON.stringify(bagArray);
-        localStorage.setItem('bag', bagArray);
+        if (localStorage.getItem('bag') === null) {
+            let bagArray = [];
+            bagArray = JSON.stringify(bagArray);
+            localStorage.setItem('bag', bagArray);
+        }
     }
 
     checkWeapon() {
@@ -425,7 +427,7 @@ AMapUI.loadUI(['misc/PositionPicker'], (PositionPicker) => {
                 
                 // Visit interaction 探索地点逻辑
                 let dist = AMap.GeometryUtil.distance(targetPos, [selfPos.lng, selfPos.lat]).toFixed(2);
-                if (dist < 150) {
+                if (dist < 300) {
                     sessionStorage.setItem('enableVisit', 'true');
                     document.getElementById('access-p').innerHTML = '可到达';
                 }
