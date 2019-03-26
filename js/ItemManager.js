@@ -141,6 +141,25 @@ class ItemManager {
             HM.addHP(hp);
             alert('回复了'+hp+'点生命！');
             break;
+            
+            case '运动饮料':
+            hp = (Math.random()*5+10).toFixed(0);
+            HM.addHP(hp);
+            alert('回复了'+hp+'点生命！');
+            break;
+
+            case '试验中的迷之注射剂':
+            if (Math.random() > 0.5) {
+                hp = (Math.random()*10+30).toFixed(0);
+                HM.addHP(hp);
+                alert('回复了'+hp+'点生命！');
+            }
+            else {
+                hp = (Math.random()*10+30).toFixed(0);
+                HM.reduceHP(hp);
+                alert('出现了不良反应！损失了'+hp+'点生命！');
+            }
+
         }
     }
 }

@@ -84,6 +84,6 @@ const itemLib = [
         id: 13,
         name: '苹果',
         type: 'food',
-        info: 'An apple a day, keep doctors away! 美味！'
+        info: 'An apple a day, keep doctors away! Delicious!'
     }
 ];
