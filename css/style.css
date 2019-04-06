@@ -3,7 +3,6 @@ body {
     text-align: center;
     background-color:lightgray;
 }
-}
 
 #head {
     display: flex;
@@ -124,7 +123,18 @@ body {
     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
     font-size: 30px;
 }
-
+#video-div {
+    margin: 5px auto;
+    border-style: solid;
+    border-color: black;
+    border-width: 5px;
+}
+#snap-div {
+    margin: 5px auto;
+    border-style: solid;
+    border-color: black;
+    border-width: 5px;
+}
 
 .menu-button-div {
     display: flex;

@@ -19,9 +19,7 @@ Embedded system assignment 3.
 * 现实交互型小游戏
     * 地图交互（事件触发）
     * 物品收集类RPG
-    * 等级
     * 生命
-    * 角色属性值
 * 简单的互动系统
     * <del>访问蓝牙，多用户交互</del>不支持，废案
 * 简单的道具系统
@@ -54,4 +52,5 @@ Embedded system assignment 3.
 * 完成了道具系统，修复大量bug
 * 道具库开始更新
 
-TODO: 完成玩家状态显示系统
+4.6
+* 因高德API更新，修改了`marker.target.D.title`为`marker.target.B.title`

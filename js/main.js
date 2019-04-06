@@ -12,12 +12,12 @@ HM.recoverHP(1, 360*1000);
  */
 
 // 按钮事件
-function openItem() {
-    window.open('item.html', '__self');
+function openCam() {
+    window.open('cam.html', '__self');
 }
 
-function openCam() {
-    button = document.getElementById('camera-button');
+function openItem() {
+    window.open('item.html', '__self');
 }
 
 // 探索随机游戏事件
@@ -147,7 +147,7 @@ AMapUI.loadUI(['misc/PositionPicker'], (PositionPicker) => {
         for (let i = 0; i < oldMarkerArray.length; i++) {
             // Select current marker
             oldMarkerArray[i].on('touchstart', (marker) => {
-                let name = marker.target.D.title;
+                let name = marker.target.B.title;
                 sessionStorage.setItem('selectMarker', name);
             });
             // POI touch events
@@ -167,7 +167,7 @@ AMapUI.loadUI(['misc/PositionPicker'], (PositionPicker) => {
                 }, 500);
                 sessionStorage.setItem('distTimerId', distTimerId.toString());
                 // Print POI info
-                document.getElementById('target-name').innerHTML = '已选择位置：' + marker.target.D.title;
+                document.getElementById('target-name').innerHTML = '已选择位置：' + marker.target.B.title;
                 
                 // Visit interaction 探索地点逻辑
                 let dist = AMap.GeometryUtil.distance(targetPos, [selfPos.lng, selfPos.lat]).toFixed(2);
@@ -261,8 +261,4 @@ document.getElementById('visit-button').addEventListener('touchstart', () => {
     }
 });
 
-
-/**
-* 相机+方向传感器定位AR显示
-*/
 

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <!-- For mobile devices, use this meta -->
+    <meta name="viewport" content="width=device-width, maximum-scale=1.0, initial-scale=1.0, user-scalable=no">
+    <title>Camera</title>
+    <link rel="stylesheet" type="text/css" media="screen" href="css/style.css" />
+</head>
+<body>
+    <!--video用于显示媒体设备的视频流，自动播放-->
+    <h3>相机</h3>
+    <div id="video-div">
+        <video id="video" autoplay style="width: 340px;height: 480px"></video>
+    </div>
+    <!--拍照按钮-->
+    <div>
+        <button id="capture">拍照</button> <button id="return">返回</button>
+    </div>
+    <!--描绘video截图-->
+    <h3>照片显示</h3>
+    <div id="snap-div">
+        <canvas id="canvas" width="340" height="480"></canvas>
+    </div>
+</body>
+<script src="js/cam.js"></script>
+</html>
