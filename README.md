@@ -54,3 +54,6 @@ Embedded system assignment 3.
 
 4.6
 * 因高德API更新，修改了`marker.target.D.title`为`marker.target.B.title`
+
+4.7
+* 新bug，Android端无法进行定位，怀疑是js脚本执行顺序修改所致/高德API更新导致，尽快修复

@@ -1,68 +1,247 @@
-let HM = new HPManager(50, 100, true);
-let IManager = new ItemManager();
+class HPManager {
+    constructor(init_HP, init_max_HP, is_main_page) {
+        if (is_main_page) {
+            let currentHP = 0;
+            let maxHP = 0;
+            if (localStorage.getItem('HP') === null) {
+                let HP = {
+                    currentHP: init_HP,
+                    maxHP: init_max_HP
+                };
+                HP = JSON.stringify(HP);
+                localStorage.setItem('HP', HP);
+            }
+            else {
+                currentHP = JSON.parse(localStorage.getItem('HP')).currentHP;
+                maxHP = JSON.parse(localStorage.getItem('HP')).maxHP;
+            }
+            document.getElementById('hp-p').innerHTML = currentHP.toString() + '/' + maxHP.toString();
+        }
+    }
 
-HM.recoverHP(1, 360*1000);
+    addHP(value) {
+        let v = Number(value);
+        let HP = JSON.parse(localStorage.getItem('HP'));
+        if (v > HP.maxHP - HP.currentHP) {
+            HP.currentHP = HP.maxHP;
+        }
+        else {
+            HP.currentHP += v;
+        }
+        HP = JSON.stringify(HP);
+        localStorage.setItem('HP', HP);
+    }
+    reduceHP(value) {
+        let v = Number(value);
+        let HP = JSON.parse(localStorage.getItem('HP'));
+        alert('受到'+v+'点伤害');
+        if (v > HP.currentHP) {
+            HP.currentHP = 0;
+            alert('你死了...复活后道具栏将清空。');
+            // Reset bag
+            let bagArray = [];
+            bagArray = JSON.stringify(bagArray);
+            localStorage.setItem('bag', bagArray);
+            
+            // Reset HP
+            HP.currentHP = 10;
+        }
+        else {
+            HP.currentHP -= v;
+        }
+        HP = JSON.stringify(HP);
+        localStorage.setItem('HP', HP);
+    }
+    recoverHP(value, time_ms) {
+        let v = Number(value);
+        setInterval(() => {
+            let HP = JSON.parse(localStorage.getItem('HP'));
+            if (v > HP.maxHP - HP.currentHP) {
+                HP.currentHP = HP.maxHP;
+            }
+            else {
+                HP.currentHP += v;
+            }
+            document.getElementById('hp-p').innerHTML = HP.currentHP.toString() + '/' + HP.maxHP.toString();
+            HP = JSON.stringify(HP);
+            localStorage.setItem('HP', HP);
+        }, time_ms);
+    }
+}
 
 /**
- * 函数定义
- * 
- * 格式建议：
- * 语句内的回调函数使用arrow function
- * 其他使用传统function
- */
+ * 道具管理类
+*/
+// Define ItemManager class
+class ItemManager {
+    constructor() {
+        // Create a bag array
+        if (localStorage.getItem('bag') === null) {
+            let bagArray = [];
+            bagArray = JSON.stringify(bagArray);
+            localStorage.setItem('bag', bagArray);
+        }
+    }
 
-// 按钮事件
-function openCam() {
-    window.open('cam.html', '__self');
-}
+    checkWeapon() {
+        let bagArray = JSON.parse(localStorage.getItem('bag'));
+        let weapon_amount = 0;
+        for (let i = 0; i < bagArray.length; i ++) {
+            if (bagArray[i].type === 'weapon') {
+                ++ weapon_amount;
+            }
+        }
+        return weapon_amount;
+    }
 
-function openItem() {
-    window.open('item.html', '__self');
-}
 
-// 探索随机游戏事件
-function randGameEvent(place) {
-    let eventType = '';
+    addItem(id, name, number, type, info) {
+        let bagArray = JSON.parse(localStorage.getItem('bag'));
+        let enableNew = true;
 
-    // 武器越多，战斗概率越小
-    let weapon_amount = IManager.checkWeapon();
-    let seed = Math.pow(2, 1/(weapon_amount+Math.random()))
-    
-    // Event type
-    eventType = seed < 0.5 ? 'battle' : 'forage';   
-    
-    switch (eventType) {
-        case 'battle':
-        // Battle event
-        alert('你在'+place+'被别人袭击了！');
-        let damage = (Math.random() * 24 + 1).toFixed(0);
-        HM.reduceHP(damage);        
-        break;
+        // Add old item
+        for (let i = 0; i < bagArray.length; i++) {
+            if (bagArray[i].name === name) {
+                bagArray[i].number += number;
+                let temp = JSON.stringify(bagArray);
+                localStorage.setItem('bag', temp);
+                alert('你获得了'+number+'个['+name+']！');
 
-        case 'forage':
-        // Forage event
-        let eventSeed = Math.random();
-        if (eventSeed < 0.9) {
-            // Random event: get items
-            alert('你在'+place+'发现了一些物品...');
-            let getAmount = (Math.random()*2+1).toFixed(0);
+                enableNew = false;
+                break;
+            }
+        }
+        if (enableNew) {
+            // Add new item
+            let item = {
+                id: id, //Number
+                name: name, //String
+                number: number, //Number
+                type: type, //String
+                info: info //String
+            }
+            bagArray.push(item);
+            let temp = JSON.stringify(bagArray);
+            localStorage.setItem('bag', temp);
+            alert('你获得了'+number+'个['+name+']！');
+        }
+    }
 
-            for (let i = 0; i < getAmount; i ++) {
-                let itemSeed = (Math.random() * (itemLib.length-1)).toFixed(0);
-                IManager.addItem(itemSeed, itemLib[itemSeed].name, 1, itemLib[itemSeed].type, itemLib[itemSeed].info);
+    removeItem(name) {
+        let removeNum = prompt('输入丢弃数目（正整数）：');
+        if (typeof(Number(removeNum)) === 'number' && confirm('确定要丢弃吗？')) {
+            let bagArray = JSON.parse(localStorage.getItem('bag'));
+            for (let i = 0; i < bagArray.length; i++) {
+                if (bagArray[i].name === name) {
+                    if (removeNum > bagArray[i].number) {
+                        removeNum = bagArray[i].number;
+                    }
+                    bagArray[i].number -= removeNum;
+                    if (bagArray[i].number <= 0) {
+                        bagArray.splice(i, 1);
+                    }
+                    let temp = JSON.stringify(bagArray);
+                    localStorage.setItem('bag', temp);
+                    alert('你丢弃了'+removeNum+'个['+name+']！');
+                    break;
+                }
             }
         }
         else {
-            // Random event: drop items
-            alert('糟糕！你的背包被划破了，随机丢掉一组物品！');
-            IManager.dropItem();
+            alert('输入信息非法！');
         }
-        break;
+    }
+
+    dropItem() {
+        let bagArray = JSON.parse(localStorage.getItem('bag'));
+        let item = bagArray.pop();
+
+        if (item === undefined) {
+            alert('背包已空！');
+        }
+        else {
+            alert('你丢失了['+item.name+']！');
+        }
+        localStorage.setItem('bag', JSON.stringify(bagArray));
+    }
+
+
+    useItem(name) {
+        let bagArray = JSON.parse(localStorage.getItem('bag'));
+        for (let i = 0; i < bagArray.length; i++) {
+            if (bagArray[i].name === name) {
+                if (bagArray[i].number-1 === 0) {
+                    bagArray.splice(i, 1);
+                }
+                else {
+                    --bagArray[i].number;
+                }
+                let temp = JSON.stringify(bagArray);
+                localStorage.setItem('bag', temp);
+                this.applyItemEffect(name);
+                break;
+            }
+        }
+    }
+
+    // Item effects
+    applyItemEffect(name) {
+        let hp = 0;
+        alert('使用了['+name+']!');
+        switch(name) {
+            case '止痛药':
+            hp = (Math.random()+8).toFixed(0);
+            HM.addHP(hp);
+            alert('回复了'+hp+'点生命！');
+            break;
+
+            case '绷带':
+            hp = (Math.random()+3).toFixed(0);
+            HM.addHP(hp);
+            alert('回复了'+hp+'点生命！');
+            break;
+
+            case '抗生素':
+            hp = (Math.random()*8+12).toFixed(0);
+            HM.addHP(hp);
+            alert('回复了'+hp+'点生命！');
+            break;
+
+            case '急救箱':
+            hp = (Math.random()*20+20).toFixed(0);
+            HM.addHP(hp);
+            alert('回复了'+hp+'点生命！');
+            break;
+            
+            case '运动饮料':
+            hp = (Math.random()*5+10).toFixed(0);
+            HM.addHP(hp);
+            alert('回复了'+hp+'点生命！');
+            break;
+
+            case '试验中的迷之注射剂':
+            if (Math.random() > 0.5) {
+                hp = (Math.random()*10+30).toFixed(0);
+                HM.addHP(hp);
+                alert('回复了'+hp+'点生命！');
+            }
+            else {
+                hp = (Math.random()*10+30).toFixed(0);
+                HM.reduceHP(hp);
+                alert('出现了不良反应！损失了'+hp+'点生命！');
+            }
+
+        }
     }
 }
 
 
 
+
+let HM = new HPManager(50, 100, true);
+let IManager = new ItemManager();
+
+HM.recoverHP(1, 360*1000);
 
 // Initialize Amap
 let map = new AMap.Map('container', {
@@ -102,6 +281,7 @@ map.plugin('AMap.Geolocation', () => {
         // Save position, session
         sessionStorage.setItem('currentPositionJSON', currentPositionJSON);
     });
+    alert('111');
 });
 
 
@@ -187,6 +367,70 @@ AMapUI.loadUI(['misc/PositionPicker'], (PositionPicker) => {
     });
     positionPicker.start();
 });
+
+
+
+
+
+
+/**
+ * 函数定义
+ * 
+ * 格式建议：
+ * 语句内的回调函数使用arrow function
+ * 其他使用传统function
+ */
+
+// 按钮事件
+function openCam() {
+    window.open('cam.html', '__self');
+}
+
+function openItem() {
+    window.open('item.html', '__self');
+}
+
+// 探索随机游戏事件
+function randGameEvent(place) {
+    let eventType = '';
+
+    // 武器越多，战斗概率越小
+    let weapon_amount = IManager.checkWeapon();
+    let seed = Math.pow(2, 1/(weapon_amount+Math.random()))
+    
+    // Event type
+    eventType = seed < 0.5 ? 'battle' : 'forage';   
+    
+    switch (eventType) {
+        case 'battle':
+        // Battle event
+        alert('你在'+place+'被别人袭击了！');
+        let damage = (Math.random() * 24 + 1).toFixed(0);
+        HM.reduceHP(damage);        
+        break;
+
+        case 'forage':
+        // Forage event
+        let eventSeed = Math.random();
+        if (eventSeed < 0.9) {
+            // Random event: get items
+            alert('你在'+place+'发现了一些物品...');
+            let getAmount = (Math.random()*2+1).toFixed(0);
+
+            for (let i = 0; i < getAmount; i ++) {
+                let itemSeed = (Math.random() * (itemLib.length-1)).toFixed(0);
+                IManager.addItem(itemSeed, itemLib[itemSeed].name, 1, itemLib[itemSeed].type, itemLib[itemSeed].info);
+            }
+        }
+        else {
+            // Random event: drop items
+            alert('糟糕！你的背包被划破了，随机丢掉一组物品！');
+            IManager.dropItem();
+        }
+        break;
+    }
+}
+
 
 // Time display
 setInterval(() => {
