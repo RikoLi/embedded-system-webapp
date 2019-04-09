@@ -18,10 +18,6 @@ function getUserMedia(constrains,success,error){
     }
 }
 
-// const camera2_id = 'f7795b5be78372c9c624859e9fc58627f6137bb63691d481c0e5dd0ff1e547bc';
-let video = document.getElementById("video");
-let canvas = document.getElementById("canvas");
-let context = canvas.getContext("2d");
 //成功的回调函数
 function success(stream){
     //兼容webkit内核浏览器
@@ -34,15 +30,21 @@ function success(stream){
 
 //异常的回调函数
 function error(error){
-    console.log("访问用户媒体设备失败：",error.name,error.message);
+    alert("访问用户媒体设备失败："+error.name+'\n'+error.message);
 }
+
+
+let video = document.getElementById("video");
+let canvas = document.getElementById("canvas");
+let context = canvas.getContext("2d");
 
 if (navigator.mediaDevices.getUserMedia || navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia){
     //调用用户媒体设备，访问摄像头
     getUserMedia({
-        video: {width:VW,height:VH}
+        video: {width:VW, height:VH}
     },success,error);
-} else {
+}
+else {
     alert("你的浏览器不支持访问用户媒体设备");
 }
 
