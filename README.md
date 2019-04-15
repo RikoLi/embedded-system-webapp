@@ -75,4 +75,4 @@ Embedded system assignment 3.
 * 使用CSS去除了高德logo
 
 4.15
-* 准备为每次探索增加体力损耗
+* 开始撰写设计报告
