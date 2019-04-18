@@ -25,16 +25,9 @@ map.plugin('AMap.Geolocation', () => {
         zoomToAccuracy: false,     
         // 不显示定位按钮
         showButton: false,
-        maximumAge: 0
+        maximumAge: 1
     });
-    // let position = [];
     map.addControl(geolocation);
-    // if (window.navigator.userAgent === 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36') {
-    //     geolocation.getCurrentPosition();//For PC users
-    // }
-    // else {
-    //     geolocation.watchPosition();    //For mobile users
-    // }
     geolocation.getCurrentPosition();
     AMap.event.addListener(geolocation, 'complete', (data) => {
         document.getElementById('current-pos').innerHTML = '当前位置：'+'['+data.position.lng+', '+data.position.lat+']';
@@ -46,8 +39,8 @@ map.plugin('AMap.Geolocation', () => {
         sessionStorage.setItem('currentPositionJSON', currentPositionJSON);
     });
     
-    AMap.event.addListener(geolocation, 'error', (data) => {
-        alert('Locating error!');
+    AMap.event.addListener(geolocation, 'error', (message) => {
+        alert('Locating error! Error message:\n'+JSON.stringify(message));
     });
 });
 
@@ -163,7 +156,7 @@ function randGameEvent(place) {
 
     // 武器越多，战斗概率越小
     let weapon_amount = IManager.checkWeapon();
-    let seed = Math.pow(2, 1/(weapon_amount+Math.random()))
+    let seed = Math.random();
     
     // Event type
     eventType = seed < 0.5 ? 'battle' : 'forage';   
@@ -173,13 +166,17 @@ function randGameEvent(place) {
         // Battle event
         alert('你在'+place+'被别人袭击了！');
         let damage = (Math.random() * 24 + 1).toFixed(0);
-        HM.reduceHP(damage);        
+        HM.reduceHP(damage * Math.exp(-weapon_amount*0.05).toFixed(0));
+        // window.location.reload();
+        let currentHP = JSON.parse(localStorage.getItem('HP')).currentHP;
+        let maxHP = JSON.parse(localStorage.getItem('HP')).maxHP;
+        document.getElementById('hp-p').innerHTML = currentHP.toString() + '/' + maxHP.toString();
         break;
 
         case 'forage':
         // Forage event
         let eventSeed = Math.random();
-        if (eventSeed < 0.9) {
+        if (eventSeed < 0.8) {
             // Random event: get items
             alert('你在'+place+'发现了一些物品...');
             let getAmount = (Math.random()*2+1).toFixed(0);

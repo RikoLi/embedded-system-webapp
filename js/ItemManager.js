@@ -99,6 +99,10 @@ class ItemManager {
         let bagArray = JSON.parse(localStorage.getItem('bag'));
         for (let i = 0; i < bagArray.length; i++) {
             if (bagArray[i].name === name) {
+                if (bagArray[i].type === 'weapon') {
+                    alert('这个道具无法使用！');
+                    break;
+                }
                 if (bagArray[i].number-1 === 0) {
                     bagArray.splice(i, 1);
                 }
