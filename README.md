@@ -77,3 +77,6 @@ Embedded system assignment 3.
 4.15
 * 开始撰写设计报告
 * 修复了武器可以被当做消耗品使用的bug
+
+4.18
+* 修改了报告
