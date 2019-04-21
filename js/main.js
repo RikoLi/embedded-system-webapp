@@ -44,8 +44,6 @@ map.plugin('AMap.Geolocation', () => {
     });
 });
 
-
-
 /**
  * 地图交互
  * 用于用户点击地图上可交互对象时进行交互
@@ -128,27 +126,13 @@ AMapUI.loadUI(['misc/PositionPicker'], (PositionPicker) => {
     positionPicker.start();
 });
 
-
-
-
-
-
 /**
  * 函数定义
  * 
  * 格式建议：
- * 语句内的回调函数使用arrow function
+ * 事件监听器、语句内的回调函数使用arrow function
  * 其他使用传统function
  */
-
-// 按钮事件
-function openCam() {
-    window.open('cam.html', '__self');
-}
-
-function openItem() {
-    window.open('item.html', '__self');
-}
 
 // 探索随机游戏事件
 function randGameEvent(place) {
@@ -195,7 +179,6 @@ function randGameEvent(place) {
     }
 }
 
-
 // Time display
 setInterval(() => {
     let date = new Date();
@@ -205,11 +188,7 @@ setInterval(() => {
     document.getElementById('time-p').innerHTML = hour + ':' + min + ':' + sec;
 }, 1000);
 
-
-
-
-
-// 绑定探索按钮
+// 绑定事件监听器
 document.getElementById('visit-button').addEventListener('touchstart', () => {
     let selectMarker = sessionStorage.getItem('selectMarker');
     // Accessibility
@@ -269,4 +248,10 @@ document.getElementById('visit-button').addEventListener('touchstart', () => {
     }
 });
 
+document.getElementById('camera-button').addEventListener('touchstart', () => {
+    window.open('cam.html', '__self');
+});
 
+document.getElementById('item-button').addEventListener('touchstart', () => {
+    window.open('item.html', '__self');
+});
